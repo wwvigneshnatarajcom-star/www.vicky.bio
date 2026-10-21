@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Uchiha Sharingan - Link in Bio</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --blood-dark: #050102;
+            --blood-red: #e60000;
+            --blood-glow: rgba(230, 0, 0, 0.65);
+            --card-glass: rgba(12, 3, 5, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--blood-dark);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 12px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* FULL SCREEN BACKGROUND GIF LAYER */
+        .bg-gif-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.42) contrast(1.1);
+        }
+
+        /* Dark blood gradient overlay for readability */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(15, 0, 2, 0.45) 0%, rgba(5, 1, 2, 0.86) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 1. INTRO OPEN ANIMATION OVERLAY */
+        #genjutsu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOutGenjutsu 1s ease-in-out 2.2s forwards;
+            pointer-events: none;
+        }
+
+        .intro-sharingan-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: introZoomOnly 2.2s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+            filter: drop-shadow(0 0 60px #ff0000);
+        }
+
+        /* LOCK LINKS DURING INTRO ANIMATION */
+        .links-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            pointer-events: none;
+            animation: unlockLinks 0.1s ease 2.2s forwards;
+        }
+
+        @keyframes unlockLinks {
+            to { pointer-events: auto; }
+        }
+
+        /* MAIN CARD */
+        .main-card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(230, 0, 0, 0.45);
+            border-radius: 24px;
+            padding: 24px 16px 20px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95),
+                        inset 0 0 15px rgba(230, 0, 0, 0.15),
+                        0 0 35px var(--blood-glow);
+            position: relative;
+            z-index: 1;
+            margin: auto;
+            opacity: 0;
+            animation: cardFadeIn 0.8s ease-out 2.0s forwards;
+        }
+
+        /* MUSIC TOGGLE BUTTON INSIDE MAIN CARD TOP RIGHT CORNER */
+        .music-toggle-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 28px;
+            height: 28px;
+            background: rgba(230, 0, 0, 0.15);
+            border: 1px solid rgba(230, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 11px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(230, 0, 0, 0.4);
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .music-toggle-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* TOP UCHIHA CLAN EMBLEM */
+        .chika-emblem {
+            width: 38px;
+            height: 38px;
+            margin: 0 auto 10px;
+            background: rgba(230, 0, 0, 0.18);
+            border: 1.5px solid rgba(230, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(230, 0, 0, 0.4);
+            animation: floatEmblem 3s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .chika-emblem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 2. PROFILE DP */
+        .profile-container {
+            position: relative;
+            width: 105px;
+            height: 105px;
+            margin: 0 auto 12px;
+        }
+
+        .sharingan-eye-wrapper {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            padding: 2.5px;
+            background: radial-gradient(circle, #7a0000 0%, #000000 85%);
+            box-shadow: 0 0 28px rgba(230, 0, 0, 0.85), inset 0 0 12px rgba(255, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ff0000;
+        }
+
+        .sharingan-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: continuousEyeSpin 8s linear infinite;
+        }
+
+        /* DP BOTTOM RIGHT BADGE */
+        .akatsuki-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 25px;
+            height: 25px;
+            background: var(--blood-red);
+            border: 1.5px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.9);
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .akatsuki-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1.8px;
+            text-shadow: 0 2px 12px rgba(230, 0, 0, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            background: linear-gradient(135deg, #e60000 0%, #660000 100%);
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 12px rgba(230, 0, 0, 0.5);
+        }
+
+        .bio-description {
+            font-size: 12.5px;
+            color: #d1a7a7;
+            margin: 12px 0 18px;
+            line-height: 1.5;
+            font-weight: 400;
+            padding: 0 8px;
+        }
+
+        /* BUTTON LINK STYLES (Guaranteed full-width blocks) */
+        .btn-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 11px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(230, 0, 0, 0.3);
+            border-radius: 14px;
+            color: #ffffff;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-link:active {
+            transform: scale(0.98);
+            background: rgba(230, 0, 0, 0.25);
+            border-color: rgba(230, 0, 0, 0.9);
+        }
+
+        .btn-left-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-badge {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(230, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.7) 100%);
+            border: 1px solid rgba(230, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 6px rgba(230, 0, 0, 0.3);
+        }
+
+        .brand-icon {
+            font-size: 16px;
+            color: #ffffff;
+            z-index: 2;
+        }
+
+        .btn-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #f1f5f9;
+        }
+
+        .right-arrow {
+            font-size: 12px;
+            color: var(--blood-red);
+            opacity: 0.5;
+        }
+
+        /* FULL SCREEN QR CODE POPUP MODAL STYLES */
+        #qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            overflow: hidden;
+        }
+
+        #qr-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-fullscreen-gif {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            filter: brightness(0.35) contrast(1.2);
+            z-index: -2;
+        }
+
+        .modal-dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(15, 0, 2, 0.5) 0%, rgba(5, 1, 2, 0.85) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .qr-modal-card {
+            width: 90%;
+            max-width: 320px;
+            background: rgba(12, 3, 5, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid var(--blood-red);
+            border-radius: 22px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(230, 0, 0, 0.85),
+                        inset 0 0 20px rgba(230, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .card-internal-gif {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.28;
+            filter: brightness(0.7) contrast(1.2);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #qr-modal.active .qr-modal-card {
+            transform: scale(1);
+        }
+
+        .qr-modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px rgba(230, 0, 0, 0.9);
+            position: relative;
+            z-index: 2;
+        }
+
+        .qr-image-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            padding: 0;
+            background: #000000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(230, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .qr-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        .close-modal-btn {
+            background: linear-gradient(135deg, #e60000 0%, #660000 100%);
+            color: #ffffff;
+            border: none;
+            padding: 8px 24px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(230, 0, 0, 0.6);
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* AUTO DISAPPEARING TOUCH WAVE ANIMATION */
+        .click-wave-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8) 0%, rgba(230, 0, 0, 0.4) 60%, transparent 80%);
+            transform: scale(0);
+            pointer-events: none;
+            z-index: 5;
+            animation: fadeWave 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeWave {
+            0% { transform: scale(0); opacity: 0.9; }
+            100% { transform: scale(2.8); opacity: 0; }
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 10px;
+            color: #995c5c;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        @keyframes introZoomOnly {
+            0% { transform: scale(0.3); opacity: 0; }
+            40% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(4.5); opacity: 0; }
+        }
+
+        @keyframes fadeOutGenjutsu {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes cardFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes continuousEyeSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes floatEmblem {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND AUDIO (Strict 20% Volume) -->
+    <audio id="bg-music" loop>
+        <source src="uchiha-theme.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- FULL SCREEN BACKGROUND GIF -->
+    <div class="bg-gif-container">
+        <img src="bg-animation.gif" alt="Background GIF" class="bg-gif">
+    </div>
+    <div class="bg-overlay"></div>
+
+    <!-- 1. INTRO OPEN ANIMATION OVERLAY -->
+    <div id="genjutsu-overlay">
+        <img src="intro-sharingan.gif" alt="Sharingan Awakening" class="intro-sharingan-img">
+    </div>
+
+    <!-- FULL SCREEN QR CODE POPUP MODAL -->
+    <div id="qr-modal">
+        <img src="bg-animation.gif" alt="Fullscreen GIF" class="modal-fullscreen-gif">
+        <div class="modal-dark-overlay"></div>
+
+        <div class="qr-modal-card">
+            <img src="card-bg.gif" alt="Internal GIF" class="card-internal-gif">
+
+            <h3 class="qr-modal-title">Free Fire ID</h3>
+            <div class="qr-image-container">
+                <img src="freefire-qr.jpg" alt="Free Fire QR Code">
+            </div>
+            <button class="close-modal-btn" onclick="closeQrModal()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- MAIN LINK IN BIO CARD -->
+    <div class="main-card">
+
+        <!-- MUSIC TOGGLE BUTTON INSIDE MAIN CARD TOP RIGHT -->
+        <div class="music-toggle-btn" id="musicToggleBtn" onclick="toggleMusic()" title="Toggle Music">
+            <i class="fa-solid fa-volume-xmark" id="musicIcon"></i>
+        </div>
+
+        <!-- Top Uchiha Clan Emblem -->
+        <div class="chika-emblem" title="Uchiha Clan Symbol">
+            <img src="clan-emblem.webp" alt="Clan Symbol">
+        </div>
+
+        <!-- 2. PROFILE DP -->
+        <div class="profile-container">
+            <div class="sharingan-eye-wrapper">
+                <img src="sharingan-dp.png" alt="Sharingan DP" class="sharingan-img">
+            </div>
+            <div class="akatsuki-badge" title="Symbol Badge">
+                <img src="akatsuki-badge.jpg" alt="Badge Symbol">
+            </div>
+        </div>
+
+        <!-- Name & Title -->
+        <h1 class="profile-name">VICKY</h1>
+        <div class="role-badge">
+            <i class="fa-solid fa-moon"></i>
+            <span>Web Developer • Sharingan Strategy</span>
+        </div>
+
+        <!-- Short Bio -->
+        <p class="bio-description">
+            "Even in the darkest shadows, a true strategist plans every move."<br>
+            Mastering code, design & infinite Tsukuyomi.
+        </p>
+
+        <!-- Links Container -->
+        <div class="links-wrapper">
+
+            <!-- 1. Instagram -->
+            <a href="https://www.instagram.com/profile_link_in?vrfl=MW1kMjZhNTNjeDA0bw==" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-instagram brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Instagram</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 2. Broadcast Channel -->
+            <a href="https://instagram.com/j/yourchannelid" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-solid fa-satellite-dish brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Broadcast Channel</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 3. Threads -->
+            <a href="https://www.threads.com/@profile_link_in" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-threads brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Threads</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 4. YouTube -->
+            <a href="https://youtube.com/@profile_link_in?si=BWKLJPQewnK2UEoU" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-youtube brand-icon"></i>
+                    </div>
+                    <span class="btn-title">YouTube</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 5. Facebook -->
+            <a href="https://www.facebook.com/profile.php?id=61595109493978" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-facebook-f brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Facebook</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 6. Email -->
+            <a href="mailto:vicky35415@gmail.com" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-solid fa-envelope brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Email</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 7. Location -->
+            <a href="https://maps.app.goo.gl/UjMC4kAaCZmkJfpu8" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-solid fa-location-dot brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Location</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 8. Snapchat -->
+            <a href="https://snapchat.com/add/yourhandle" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-snapchat brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Snapchat</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 9. WhatsApp -->
+            <a href="https://wa.me/919994835415" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-whatsapp brand-icon"></i>
+                    </div>
+                    <span class="btn-title">WhatsApp</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 10. WhatsApp Channel -->
+            <a href="https://whatsapp.com/channel/0029Vb8yqr4KWEKsPiU0zK1A" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-whatsapp brand-icon"></i>
+                    </div>
+                    <span class="btn-title">WhatsApp Channel</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 11. Free Fire (QR Popup) -->
+            <div class="btn-link" onclick="openQrModal()">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-solid fa-gamepad brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Free Fire</span>
+                </div>
+                <i class="fa-solid fa-qrcode right-arrow"></i>
+            </div>
+
+            <!-- 12. Twitter / X -->
+            <a href="https://x.com/profile_link_in" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-x-twitter brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Twitter (X)</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+            <!-- 13. Telegram -->
+            <a href="https://t.me/+Lv-fQLJz9tZjMDY1" target="_blank" class="btn-link">
+                <div class="btn-left-content">
+                    <div class="icon-badge">
+                        <i class="fa-brands fa-telegram brand-icon"></i>
+                    </div>
+                    <span class="btn-title">Telegram</span>
+                </div>
+                <i class="fa-solid fa-chevron-right right-arrow"></i>
+            </a>
+
+        </div>
+
+        <div class="footer">
+            <p>♦ Uchiha x Akatsuki Edition ♦</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for 10% Volume Lock and Clean Background Handling -->
+    <script>
+        const music = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('musicIcon');
+        
+        // Strictly set volume to 10% (0.10)
+        music.volume = 0.10;
+
+        let isPlaying = localStorage.getItem('uchiba_music_playing') === 'true';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (isPlaying) {
+                music.play().then(() => {
+                    musicIcon.className = "fa-solid fa-volume-high";
+                }).catch(error => {
+                    console.log("Auto-play restricted.");
+                    isPlaying = false;
+                    localStorage.setItem('uchiba_music_playing', 'false');
+                    musicIcon.className = "fa-solid fa-volume-xmark";
+                });
+            } else {
+                musicIcon.className = "fa-solid fa-volume-xmark";
+            }
+        });
+
+        function toggleMusic() {
+            // Re-enforce 10% volume on every toggle click
+            music.volume = 0.10;
+            
+            if (isPlaying) {
+                music.pause();
+                isPlaying = false;
+                localStorage.setItem('uchiba_music_playing', 'false');
+                musicIcon.className = "fa-solid fa-volume-xmark";
+            } else {
+                music.play().then(() => {
+                    isPlaying = true;
+                    localStorage.setItem('uchiba_music_playing', 'true');
+                    musicIcon.className = "fa-solid fa-volume-high";
+                }).catch(error => {
+                    console.log("Play failed.");
+                });
+            }
+        }
+
+        // Strict pause when leaving the website or tab
+        function stopAudioOnLeave() {
+            music.pause();
+            musicIcon.className = "fa-solid fa-volume-xmark";
+        }
+
+        window.addEventListener('blur', stopAudioOnLeave);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAudioOnLeave();
+            }
+        });
+        window.addEventListener('pagehide', stopAudioOnLeave);
+
+        // Resume playing when coming back to the website if it was playing before
+        window.addEventListener('focus', () => {
+            if (localStorage.getItem('uchiba_music_playing') === 'true') {
+                music.volume = 0.10;
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.className = "fa-solid fa-volume-high";
+                }).catch(e => {
+                    console.log("Focus resume blocked.");
+                });
+            }
+        });
+
+        function openQrModal() {
+            document.getElementById('qr-modal').classList.add('active');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qr-modal').classList.remove('active');
+        }
+
+        document.getElementById('qr-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQrModal();
+            }
+        });
+
+        // Touch Wave Ripple with Guaranteed Auto-Cleanup
+        document.querySelectorAll('.btn-link').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const wave = document.createElement('span');
+                wave.className = 'click-wave-effect';
+                
+                const size = Math.max(rect.width, rect.height) * 1.5;
+                wave.style.width = wave.style.height = `${size}px`;
+                wave.style.left = `${e.clientX - rect.left - size / 2}px`;
+                wave.style.top = `${e.clientY - rect.top - size / 2}px`;
+
+                this.appendChild(wave);
+
+                setTimeout(() => {
+                    wave.remove();
+                }, 400);
+            });
+        });
+    </script>
+</body>
+</html>
